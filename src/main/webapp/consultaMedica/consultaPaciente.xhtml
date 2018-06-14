@@ -1,0 +1,819 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../plantilla.xhtml">
+
+
+            <ui:define name="content">
+                <p:growl autoUpdate="true"/>
+                <p:panel header="Consulta de Paciente"  id="panel"
+                         style="width: 100%; height: 100%;margin: 0 auto; text-align:center;align-self: center ;
+                         padding: 5px; text-align: justify;font-size: 14px">
+
+                    <h:form>
+                        <p:tabView   dynamic="true" effect="fold">
+                            <p:tab title="Datos  de Paciente">      
+                                <h1>Datos personales de paciente</h1>
+                                <p:panel header="Consulta de Paciente" style="align-content: center;margin: 0 auto;align-self: center; width: 60%
+                                         ;align-self: center ;
+                                         padding: 5px; text-align: justify;font-size: 14px" >
+                                    <p:panelGrid columns="2" layout="grid">
+                                        <p:outputLabel value="Fecha de Consulta"/>
+                                        <p:inputText value="#{episodioController.episodio.fechaConsulta}"/>
+                                        <p:outputLabel value="Nombre del paciente"/>
+                                        <p:outputLabel value="#{episodioController.cita.idPaciente.idPersona.nombres} #{episodioController.cita.idPaciente.idPersona.apellidos}"/>
+                                        <p:outputLabel value="Fecha de Nacimiento"/>
+                                        <p:outputLabel value="#{episodioController.cita.idPaciente.idPersona.fechaDeNacimiento}"/>
+                                        <p:outputLabel value="Sexo"/>
+                                        <p:outputLabel value="#{episodioController.cita.idPaciente.idPersona.sexo}"/>
+                                        <p:outputLabel value="Estado civil"/>
+                                        <p:outputLabel value="#{episodioController.cita.idPaciente.idPersona.estadoCivil}"/>
+                                        <p:outputLabel value="DUI"/>
+                                        <p:outputLabel value="#{episodioController.cita.idPaciente.idPersona.dui}"/>
+                                        <p:outputLabel value="Dirección"/>
+                                        <p:outputLabel value="#{episodioController.cita.idPaciente.idPersona.direccion}"/>
+                                        <p:outputLabel value="Teléfono"/>
+                                        <p:outputLabel value="#{episodioController.cita.idPaciente.idPersona.telefono}"/>
+
+                                    </p:panelGrid>
+                                </p:panel>
+                            </p:tab>
+                            <p:tab title="Episodio Clinico">    
+                                <p:panel header="Motivo de consulta">
+                                    <h1>Motivo de consulta</h1>
+
+                                    <p:panelGrid columns="2"  layout="grid">
+                                        <p:outputLabel value="Actividad Primaria"/>
+                                        <p:selectOneMenu id="cboActividadPrimaria" value="#{episodioController.episodio.actividadPrimaria}"  
+                                                         effect="bounce"   filter="true"  required="true">
+                                            <f:selectItem itemLabel="-- Seleccione Actividad --" noSelectionOption="true"/>
+                                            <f:selectItem itemLabel="Control de medicamento cronico" itemValue="Control de medicamento cronico"/>
+                                            <f:selectItem itemLabel="Consulta Aguda" itemValue="Consulta Aguda"/>
+                                            <f:selectItem itemLabel="Respuesta de examenes" itemValue="Respuesta de examenes"/>
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel value="Tipo de consulta Primaria"/>
+                                        <p:selectOneMenu id="cboTipoConsultaPrimaria" value="#{episodioController.episodio.tipoConsultaPrimaria}"  
+                                                         effect="bounce"   filter="true" required="true" >
+                                            <f:selectItem itemLabel="-- Seleccione tipo --" noSelectionOption="true"/>
+                                            <f:selectItem itemLabel="Primera vez" itemValue="Primera vez"/>
+                                            <f:selectItem itemLabel="Subsecuente" itemValue="Subsecuente"/>
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel value="Actividad Secundaria"/>
+                                        <p:selectOneMenu id="cboActividadSecundaria" value="#{episodioController.episodio.actividadSecundaria}"  
+                                                         effect="bounce"   filter="true" >
+                                            <f:selectItem itemLabel="-- Seleccione Actividad --" noSelectionOption="true"/>
+                                            <f:selectItem itemLabel="Control de medicamento cronico" itemValue="Control de medicamento cronico"/>
+                                            <f:selectItem itemLabel="Consulta Aguda" itemValue="Consulta Aguda"/>
+                                            <f:selectItem itemLabel="Respuesta de examenes" itemValue="Respuesta de examenes"/>
+                                            <f:selectItem itemLabel="No aplica" itemValue="No aplica"/>
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel value="Tipo de consulta Secundaria"/>
+                                        <p:selectOneMenu id="cboTipoConsultaSecundaria" value="#{episodioController.episodio.tipoActividadSecundaria}"  
+                                                         effect="bounce"   filter="true" >
+                                            <f:selectItem itemLabel="-- Seleccione tipo --" noSelectionOption="true"/>
+                                            <f:selectItem itemLabel="Primera vez" itemValue="Primera vez"/>
+                                            <f:selectItem itemLabel="Subsecuente" itemValue="Subsecuente"/>
+                                            <f:selectItem itemLabel="No aplica" itemValue="No aplica"/>
+                                        </p:selectOneMenu>
+
+                                    </p:panelGrid>
+                                </p:panel>
+                            </p:tab>
+
+                            <p:tab title="Signos vitales" >
+                                <h1>Signos vitales</h1>
+
+                                <p:panelGrid columns="2" layout="grid" style="width: 55%; align-self: center;margin: 0 auto;
+                                             text-align:center;align-self: center ;
+                                             padding: 5px; text-align: justify;font-size: 14px">
+                                    <p:outputLabel value="Temperatura C° "/>
+                                    <p:spinner value="#{episodioController.episodio.temperatura}" min="0" size="8"  stepFactor="0.25"/>
+                                    <p:outputLabel value="Frecuencia Cardiaca° "/>
+                                    <p:spinner value="#{episodioController.episodio.frecuenciaCardiaca}" min="0" size="8"  stepFactor="0.25"/>
+                                    <p:outputLabel value="Frecuencia Respiratoria "/>
+                                    <p:spinner value="#{episodioController.episodio.frecuenciaCardiaca}" min="0" size="8"  stepFactor="0.25"/>
+                                    <p:outputLabel value="Presión Arterial Sistolica "/>
+                                    <p:spinner value="#{episodioController.episodio.PArterialSistolica}" min="0" size="8"  stepFactor="0.25"/>
+                                    <p:outputLabel value="Presión Arterial Diastolica "/>
+                                    <p:spinner value="#{episodioController.episodio.PArterialDiastolica}" min="0" size="8"  stepFactor="0.25"/>
+                                    <p:outputLabel value="Peso (Kg) "/>
+                                    <p:spinner value="#{episodioController.episodio.peso}" min="0" size="8"  stepFactor="0.25"/>
+                                    <p:outputLabel value="Talla (Mts) "/>
+                                    <p:spinner value="#{episodioController.episodio.talla}" min="0" size="8"  stepFactor="0.25" />
+                                    <p:outputLabel value="Indice de Masa Corporal " />
+                                    <p:spinner value="#{episodioController.episodio.imc}" min="0" size="8"  stepFactor="0.25"/>
+                                </p:panelGrid>
+
+                            </p:tab> 
+                            <p:tab title="Antecedentes">
+                                <h1>Antecedentes de Paciente</h1>
+
+                                <p:panelGrid columns="2" layout="grid" style="margin: 0 auto">
+                                    <p:outputLabel value="Antecedentes"/>
+                                    <p:inputTextarea value="#{episodioController.episodio.antecedentes}" style="width: 95%;height: 100px;
+                                                     margin: 0 auto; text-align:center;align-self: baseline ;
+                                                     padding: 5px; text-align: justify;font-size: 14px;margin-left: -215px"/>
+                                </p:panelGrid>
+                            </p:tab>
+                            <p:tab title="SOAP">
+                                <h1>SOAP</h1>
+
+                                <p:panelGrid columns="2" layout="grid" style="width: 95%;align-self: center">
+                                    <p:outputLabel value="Subjetivo"/>
+                                    <p:inputTextarea value="#{episodioController.episodio.subjetivo}" style="width: 95%;height: 100px;
+                                                     margin: 0 auto; text-align:center;align-self: baseline ;
+                                                     padding: 5px; text-align: justify;font-size: 14px;margin-left: -215px"/>
+                                    <p:outputLabel value="Objetivo"/>
+                                    <p:inputTextarea value="#{episodioController.episodio.objetivo}" style="width: 95%;height: 100px;
+                                                     margin: 0 auto; text-align:center;align-self: baseline ;
+                                                     padding: 5px; text-align: justify;font-size: 14px;margin-left: -215px"/>
+                                    <p:outputLabel value="Analisis"/>
+                                    <p:inputTextarea value="#{episodioController.episodio.analisis}" style="width: 95%;height: 100px;
+                                                     margin: 0 auto; text-align:center;align-self: baseline ;
+                                                     padding: 5px; text-align: justify;font-size: 14px;margin-left: -215px"/>
+                                    <p:outputLabel value="Plan"/>
+                                    <p:inputTextarea value="#{episodioController.episodio.plan}" style="width: 95%;height: 100px;
+                                                     margin: 0 auto; text-align:center;align-self: baseline ;
+                                                     padding: 5px; text-align: justify;font-size: 14px;margin-left: -215px"/>
+                                </p:panelGrid>
+                            </p:tab>
+
+
+                            <p:tab title="Diagnostico">
+                                <h1>Diagnosticos Encontrados</h1>
+
+                                <p:panelGrid columns="2" layout="grid">
+                                    <p:outputLabel value="Seleccionar Diagnosticos "/>
+                                    <p:commandButton value=" + " oncomplete="PF('dlgDiagnosticos').show();"/>
+                                    <p:outputLabel value="Diagnostico encontrado"/>
+                                    <p:outputLabel value="#{episodioController.diagnosticoEncontrado.idDiagnostico.descripcion}"/>
+                                    <p:outputLabel value="Estado de diagnostico"/>
+                                    <p:selectOneMenu value="#{episodioController.diagnosticoEncontrado.estado}">
+                                        <f:selectItem itemLabel="-- Seleccione tipo --" noSelectionOption="true"/>
+                                        <f:selectItem itemLabel="Confirmado" itemValue="Confirmado"/>
+                                        <f:selectItem itemLabel="Presunción" itemValue="Presunción"/>
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="Cantidad de diagnosticos"/>
+                                    <p:outputLabel  value="#{episodioController.lstDiagnosticosEncontrados.size()}"/>
+                                </p:panelGrid>
+                                <p:commandButton value="Agregar Diagnostico" actionListener="#{episodioController.agregarDiagnostico()}" update="panel"/>
+                                <br/>
+                                <p:dataTable id="tblDiag" value="#{episodioController.lstDiagnosticosEncontrados}" var="diagnostico"
+                                             widgetVar="tblDiag" style="width: 80%;margin: 0 auto; text-align:center;
+                                             padding: 5px; text-align: justify;font-size: 14px"
+                                             emptyMessage="No se han agregado diagnosticos"
+                                             paginator="true" rows="5" paginatorPosition="bottom"
+                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15" reflow="true" resizeMode="expand"  >
+                                    <p:column headerText="Diagnosticos Seleccionado" style="width: 50%; text-align:  center" >
+                                        <p:outputLabel value="#{diagnostico.idDiagnostico.descripcion}"/>
+                                    </p:column>
+                                    <p:column headerText="Estado de diagnostico" style="width: 50%; text-align:  center" >
+                                        <p:outputLabel value="#{diagnostico.estado}"/>
+                                    </p:column>
+                                    <p:column headerText="Eliminar diagnostico" style="width: 10%" >
+                                        <p:commandButton  icon="ui-icon-close" update="panel" actionListener="#{episodioController.removerDiagnostico(diagnostico)}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+
+
+                            <p:tab title="Recetas">
+                                <h1>Inidicación de medicamentos</h1>
+
+                                <p:panelGrid columns="2" layout="grid">
+                                    <p:outputLabel value="Indicar Medicamentos "/>
+                                    <p:commandButton value=" + " oncomplete="PF('dlgMedicamentos').show();"/>
+
+                                    <p:outputLabel value="Nombre generico del medicamento"/>
+                                    <p:outputLabel value="#{episodioController.medicamentoIndicado.idMedicamento.nombreGenerico}"/>
+                                    <p:outputLabel value="Nombre comercial del medicamento"/>
+                                    <p:outputLabel value="#{episodioController.medicamentoIndicado.idMedicamento.nombreComercial}"/>
+                                    <p:outputLabel value="Presentación"/>
+                                    <p:outputLabel value="#{episodioController.medicamentoIndicado.idMedicamento.presentacion}"/>
+                                    <p:outputLabel value="Cantidad: "/>
+                                    <p:spinner value="#{episodioController.medicamentoIndicado.cantidad}" min="0" size="8"  stepFactor="0.25"/>
+                                    <p:outputLabel value="Indicación"/>
+                                    <p:inputTextarea value="#{episodioController.medicamentoIndicado.dosis}"/>
+
+
+                                </p:panelGrid>
+                                <p:panelGrid columns="2" layout="grid">
+                                    <p:commandButton value="Agregar" actionListener="#{episodioController.agregarMedicamento()}" update="panel"/>
+                                    <p:column/>
+                                    <p:outputLabel value="Cantidad de Medicamentos indicados"/>
+                                    <p:outputLabel  value="#{episodioController.lstMedicamentosIndicados.size()}"/>
+
+                                </p:panelGrid>
+
+                                <br/>
+                                <p:dataTable id="tblRecetas" value="#{episodioController.lstMedicamentosIndicados}" var="medicamento"
+                                             widgetVar="tblRecetas" emptyMessage="No se han agregado medicamentos"
+                                             >
+                                    <p:column headerText="Nombre Generico de Medicamento" style="width: 25%; text-align:  center" >
+                                        <p:outputLabel value="#{medicamento.idMedicamento.nombreGenerico}"/>
+                                    </p:column>
+                                    <p:column headerText="Nombre Comercial de Medicamento" style="width: 25%; text-align:  center" >
+                                        <p:outputLabel value="#{medicamento.idMedicamento.nombreComercial}"/>
+                                    </p:column>
+                                    <p:column headerText="Presentación" style="width: 25%; text-align:  center" >
+                                        <p:outputLabel value="#{medicamento.idMedicamento.presentacion}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Cantidad" style="width: 15%; text-align:  center" >
+                                        <p:outputLabel value="#{medicamento.cantidad}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Indicaciones" style="width: 25%; text-align:  center" >
+                                        <p:outputLabel value="#{medicamento.dosis}"/>
+                                    </p:column>
+                                    <p:column headerText="Eliminar medicamento indicado" style="width: 10%" >
+                                        <p:commandButton icon="ui-icon-close" update="panel" actionListener="#{episodioController.removerMedicamento(medicamento)}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+
+                            <p:tab title="Examenes">
+                                <h1>Examenes de Laboratorio Clínico</h1>
+                                <p:panelGrid columns="2" layout="grid">
+                                    <p:outputLabel value="Indicar Examenes de Laboratorio Clínico: "/>
+                                    <p:commandButton value=" + " oncomplete="PF('dlgExamenClinico').show();"/>
+                                    <p:outputLabel value="Examen Clínico"/>
+                                    <p:outputLabel value="#{episodioController.examLabInd.idExamenLabClinico.descripcion}"/>
+                                    <p:outputLabel value="Motivo de indicación"/>
+                                    <p:inputText value="#{episodioController.examLabInd.justificacion}"/>
+                                    <p:outputLabel value="Cantidad de examenes clínicos"/>
+                                    <p:outputLabel  value="#{episodioController.lstExamenesCliniIndicados.size()}"/>
+                                    <p:column/>
+                                    <p:commandButton value="Agregar" actionListener="#{episodioController.agregarExamLab()}" update="panel"/>
+
+                                </p:panelGrid>
+                                <br/>
+                                <p:dataTable id="tblExamenCli" value="#{episodioController.lstExamenesCliniIndicados}" var="clinico"
+                                             widgetVar="tblExamenCli" emptyMessage="No se han agregado Examenes Clínicos">
+                                    <p:column headerText="Examenes Clinicos Indicado" style="width: 50%; text-align:  center" >
+                                        <p:outputLabel value="#{clinico.idExamenLabClinico.descripcion}"/>
+                                    </p:column>
+                                    <p:column headerText="Motivo de Indicación de Examen" style="width: 50%; text-align:  center" >
+                                        <p:outputLabel value="#{clinico.justificacion}"/>
+                                    </p:column>
+                                    <p:column headerText="Eliminar examen clínico" style="width: 10%" >
+                                        <p:commandButton icon="ui-icon-close" update="panel" actionListener="#{episodioController.removerExamLab(clinico)}"/>
+                                    </p:column>
+                                </p:dataTable>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <p:separator/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <h1>Examenes Radiologicos</h1>
+                                <p:panelGrid columns="2" layout="grid">
+                                    <p:outputLabel value="Indicar Examenes Radiologicos: "/>
+                                    <p:commandButton value=" + " oncomplete="PF('dlgExamenRad').show();"/>
+                                    <p:outputLabel value="Examen Radiologico indicado"/>
+                                    <p:outputLabel value="#{episodioController.examRadiInd.idExamenRadiologico.descripcion}"/>
+                                    <p:outputLabel value="Motivo de indicación"/>
+                                    <p:inputText value="#{episodioController.examRadiInd.justificacion}"/>
+                                    <p:outputLabel value="Cantidad de examenes radiologicos"/>
+                                    <p:outputLabel  value="#{episodioController.lstExamRadioIndicados.size()}"/>
+                                    <p:column/>
+                                    <p:commandButton value="Agregar" update="panel" actionListener="#{episodioController.agregarExamRadiologico()}"/>
+                                </p:panelGrid>
+                                <br/>
+                                <p:dataTable id="tblExamenRad" value="#{episodioController.lstExamRadioIndicados}" var="radiologico"
+                                             widgetVar="tblExamenRad" emptyMessage="No se han agregado examenes Radiologicos">
+                                    <p:column headerText="Examenes Radiologicos Indicados" style="width: 50%; text-align:  center" >
+                                        <p:outputLabel value="#{radiologico.idExamenRadiologico.descripcion}"/>
+                                    </p:column>
+                                    <p:column headerText="Motivo de indicación de examen" style="width: 50%; text-align:  center" >
+                                        <p:outputLabel value="#{radiologico.justificacion}"/>
+                                    </p:column>
+                                    <p:column headerText="Eliminar examen Radiologico" style="width: 10%" >
+                                        <p:commandButton icon="ui-icon-close" update="panel" actionListener="#{episodioController.removerExamRad(radiologico)}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                            <p:tab title="Incapacidad">
+                                <h1>Incapacitar Paciente</h1>
+                                <p:panelGrid layout="grid" columns="2">
+                                    <p:outputLabel value="Tipo de incapacidad"/>
+                                    <p:selectOneMenu/>
+                                    <p:outputLabel value="Tipo de Riesgo Incapacidad"/>
+                                    <p:selectOneMenu/>
+                                    <p:outputLabel value="Dias de incapacidad"/>
+                                    <p:spinner value="#{episodioController.episodio.frecuenciaCardiaca}"/>
+                                    <p:outputLabel value="Fecha de inicio de incapacidad"/>
+                                    <p:calendar id="cldInicio"   value="#{agendaController.cita.fechaRegistro}"
+                                                pagedate="today"  locale="es"  pattern="dd/MM/yyyy" />
+                                    <p:outputLabel value="Fecha de inicio de incapacidad"/>
+                                    <p:calendar id="cldFinal"   value="#{agendaController.cita.fechaRegistro}"
+                                                pagedate="today"  locale="es"  pattern="dd/MM/yyyy" />
+                                    <p:outputLabel value="Observaciones de Incapacidad"/>
+                                    <p:inputTextarea/>
+                                </p:panelGrid>
+                            </p:tab>
+                            <p:tab title="Referencia">
+                                <h1>Referir a Especialistas en Salud</h1>
+
+                                <p:panelGrid columns="2" layout="grid">
+                                    <p:outputLabel value="Indicar Especialistas a referir "/>
+                                    <p:commandButton value=" + " oncomplete="PF('dlgReferir').show();"/>
+                                    <p:outputLabel value="Especialista a referir"/>
+                                    <p:outputLabel value="#{episodioController.referencia.idEspecialista.descripcion}"/>
+                                    <p:outputLabel value="Motivo de referrencia"/>
+                                    <p:inputTextarea value="#{episodioController.referencia.motivoReferencia}"/>
+                                    <p:outputLabel value="Cantidad de especialistas a los que se refiere:"/>
+                                    <p:outputLabel  value="#{episodioController.lstReferencias.size()}"/>
+                                    <p:column/>
+                                    <p:commandButton value="Agregar" actionListener="#{episodioController.agregarReferencia()}" update="panel"/>
+                                </p:panelGrid>
+                                <br/>
+                                <p:dataTable id="tblEspecialistas" value="#{episodioController.lstReferencias}" var="especialista" emptyMessage="No se han agregado referencias"
+                                             widgetVar="tblEspecialistas">
+                                    <p:column headerText="Especialistas a referir" style="width: 50%; text-align:  center" >
+                                        <p:outputLabel value="#{especialista.idEspecialista.descripcion}"/>
+                                    </p:column>
+                                    <p:column headerText="Motivo de referencia" style="width: 50%; text-align:  center" >
+                                        <p:outputLabel value="#{especialista.motivoReferencia}"/>
+                                    </p:column>
+                                    <p:column headerText="Eliminar especialista al que se refiere" style="width: 10%" >
+                                        <p:commandButton icon="ui-icon-close" update="panel" actionListener="#{episodioController.removerEspecialista(especialista)}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+
+
+                            <p:tab title="Resumen">
+                                <p:panel header="Resumen de Consulta" style="align-content: center;margin: 0 auto;align-self: center; width: 60%
+                                         ;align-self: center ;
+                                         padding: 5px; text-align: justify;font-size: 14px">
+                                    <h1>SIMED Resumen de Consulta Medíca</h1>
+
+                                    <br/>
+                                    <br/>
+                                    <p:separator/>
+
+                                    <h2>Datos Personales</h2>
+                                    <p:panelGrid columns="2" layout="grid">
+                                        <p:outputLabel value="Fecha de Consulta"/>
+                                        <p:outputLabel value="#{episodioController.episodio.fechaConsulta}"/>
+                                        <p:outputLabel value="Nombre del paciente"/>
+                                        <p:outputLabel value="#{episodioController.cita.idPaciente.idPersona.nombres} #{episodioController.cita.idPaciente.idPersona.apellidos}"/>
+                                        <p:outputLabel value="Fecha de Nacimiento"/>
+                                        <p:outputLabel value="#{episodioController.cita.idPaciente.idPersona.fechaDeNacimiento}"/>
+                                        <p:outputLabel value="Sexo"/>
+                                        <p:outputLabel value="#{episodioController.cita.idPaciente.idPersona.sexo}"/>
+                                        <p:outputLabel value="Estado civil"/>
+                                        <p:outputLabel value="#{episodioController.cita.idPaciente.idPersona.estadoCivil}"/>
+                                        <p:outputLabel value="DUI"/>
+                                        <p:outputLabel value="#{episodioController.cita.idPaciente.idPersona.dui}"/>
+                                    </p:panelGrid>
+                                    <br/>
+                                    <br/>
+                                    <p:separator/>
+
+                                    <h2>Motivo de consulta</h2>
+
+                                    <p:panelGrid columns="2"  layout="grid">
+                                        <p:outputLabel value="Actividad Primaria"/>
+                                        <p:selectOneMenu  value="#{episodioController.episodio.actividadPrimaria}"  disabled="true" 
+                                                          effect="bounce"   filter="true" >
+                                            <f:selectItem itemLabel="-- Seleccione Actividad --" noSelectionOption="true"/>
+                                            <f:selectItem itemLabel="Control de medicamento cronico" itemValue="Control de medicamento cronico"/>
+                                            <f:selectItem itemLabel="Consulta Aguda" itemValue="Consulta Aguda"/>
+                                            <f:selectItem itemLabel="Respuesta de examenes" itemValue="Respuesta de examenes"/>
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel value="Tipo de consulta Primaria"/>
+                                        <p:selectOneMenu  value="#{episodioController.episodio.tipoConsultaPrimaria}"  disabled="true" 
+                                                          effect="bounce"   filter="true" >
+                                            <f:selectItem itemLabel="-- Seleccione tipo --" noSelectionOption="true"/>
+                                            <f:selectItem itemLabel="Primera vez" itemValue="Primera vez"/>
+                                            <f:selectItem itemLabel="Subsecuente" itemValue="Subsecuente"/>
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel value="Actividad Secundaria"/>
+                                        <p:selectOneMenu  value="#{episodioController.episodio.actividadSecundaria}"  disabled="true" 
+                                                          effect="bounce"   filter="true" >
+                                            <f:selectItem itemLabel="-- Seleccione Actividad --" noSelectionOption="true"/>
+                                            <f:selectItem itemLabel="Control de medicamento cronico" itemValue="Control de medicamento cronico"/>
+                                            <f:selectItem itemLabel="Consulta Aguda" itemValue="Consulta Aguda"/>
+                                            <f:selectItem itemLabel="Respuesta de examenes" itemValue="Respuesta de examenes"/>
+                                            <f:selectItem itemLabel="No aplica" itemValue="No aplica"/>
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel value="Tipo de consulta Secundaria"/>
+                                        <p:selectOneMenu  value="#{episodioController.episodio.tipoActividadSecundaria}"  disabled="true" 
+                                                          effect="bounce"   filter="true" >
+                                            <f:selectItem itemLabel="-- Seleccione tipo --" noSelectionOption="true"/>
+                                            <f:selectItem itemLabel="Primera vez" itemValue="Primera vez"/>
+                                            <f:selectItem itemLabel="Subsecuente" itemValue="Subsecuente"/>
+                                            <f:selectItem itemLabel="No aplica" itemValue="No aplica"/>
+                                        </p:selectOneMenu>
+
+                                    </p:panelGrid>
+                                    <br/>
+                                    <br/>
+                                    <p:separator/>
+
+                                    <h2>Signos vitales</h2>
+
+                                    <p:panelGrid columns="2" layout="grid" style="width: 85%; align-self: center;margin: 0 auto;
+                                                 text-align:center;align-self: center ;
+                                                 padding: 5px; text-align: justify;font-size: 14px">
+                                        <p:outputLabel value="Temperatura C° "/>
+                                        <p:spinner value="#{episodioController.episodio.temperatura}" min="0" size="8" disabled="true"  stepFactor="0.25"/>
+                                        <p:outputLabel value="Frecuencia Cardiaca° "/>
+                                        <p:spinner value="#{episodioController.episodio.frecuenciaCardiaca}" min="0" size="8" disabled="true"  stepFactor="0.25"/>
+                                        <p:outputLabel value="Frecuencia Respiratoria "/>
+                                        <p:spinner value="#{episodioController.episodio.frecuenciaCardiaca}" min="0" size="8" disabled="true"  stepFactor="0.25"/>
+                                        <p:outputLabel value="Presión Arterial Sistolica "/>
+                                        <p:spinner value="#{episodioController.episodio.PArterialSistolica}" min="0" size="8" disabled="true"  stepFactor="0.25"/>
+                                        <p:outputLabel value="Presión Arterial Diastolica "/>
+                                        <p:spinner value="#{episodioController.episodio.PArterialDiastolica}" min="0" size="8"  disabled="true" stepFactor="0.25"/>
+                                        <p:outputLabel value="Peso (Kg) "/>
+                                        <p:spinner value="#{episodioController.episodio.peso}" min="0" size="8" disabled="true"  stepFactor="0.25"/>
+                                        <p:outputLabel value="Talla (Mts) "/>
+                                        <p:spinner value="#{episodioController.episodio.talla}" min="0" size="8" disabled="true"  stepFactor="0.25" />
+                                        <p:outputLabel value="Indice de Masa Corporal " />
+                                        <p:spinner value="#{episodioController.episodio.imc}" min="0" size="8" disabled="true" stepFactor="0.25"/>
+                                    </p:panelGrid>
+                                    <br/>
+                                    <br/>
+                                    <p:separator/>
+
+                                    <h1>SOAP</h1>
+
+                                    <p:panelGrid columns="2" layout="grid" style="width: 95%;align-self: center">
+                                        <p:outputLabel value="Subjetivo"/>
+                                        <p:inputTextarea disabled="true" value="#{episodioController.episodio.subjetivo}" style="width: 95%;height: 100px;
+                                                         margin: 0 auto; text-align:center;align-self: baseline ;
+                                                         padding: 5px; text-align: justify;font-size: 14px;margin-left: -215px"/>
+                                        <p:outputLabel value="Objetivo"/>
+                                        <p:inputTextarea disabled="true" value="#{episodioController.episodio.objetivo}" style="width: 95%;height: 100px;
+                                                         margin: 0 auto; text-align:center;align-self: baseline ;
+                                                         padding: 5px; text-align: justify;font-size: 14px;margin-left: -215px"/>
+                                        <p:outputLabel value="Analisis"/>
+                                        <p:inputTextarea disabled="true" value="#{episodioController.episodio.analisis}" style="width: 95%;height: 100px;
+                                                         margin: 0 auto; text-align:center;align-self: baseline ;
+                                                         padding: 5px; text-align: justify;font-size: 14px;margin-left: -215px"/>
+                                        <p:outputLabel value="Plan"/>
+                                        <p:inputTextarea disabled="true" value="#{episodioController.episodio.plan}" style="width: 95%;height: 100px; 
+                                                         margin: 0 auto; text-align:center;align-self: baseline ;
+                                                         padding: 5px; text-align: justify;font-size: 14px;margin-left: -215px"/>
+                                    </p:panelGrid>
+                                    <br/>
+                                    <br/>
+                                    <p:separator/>
+
+                                    <h2>Diagnostico</h2>
+
+                                    <p:dataTable  value="#{episodioController.lstDiagnosticosEncontrados}" var="diagnosticos" 
+                                                  style="width: 80%;margin: 0 auto; text-align:center;
+                                                  padding: 5px; text-align: justify;font-size: 14px"
+                                                  emptyMessage="No se han agregado diagnosticos"
+                                                  rows="15" 
+                                                  >
+                                        <p:column headerText="Diagnosticos Seleccionado" style="width: 50%; text-align:  center" >
+                                            <p:outputLabel value="#{diagnosticos.idDiagnostico.descripcion}"/>
+                                        </p:column>
+                                        <p:column headerText="Estado de diagnostico" style="width: 50%; text-align:  center" >
+                                            <p:outputLabel value="#{diagnosticos.estado}"/>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                    <br/>
+                                    <br/>
+                                    <p:separator/>
+
+                                    <h2>Medicamentos Indicados  </h2>
+                                    <p:dataTable  value="#{episodioController.lstMedicamentosIndicados}" var="medicamentos"
+                                                  emptyMessage="No se han agregado medicamentos"
+                                                  >
+                                        <p:column headerText="Nombre Generico de Medicamento" style="width: 25%; text-align:  center" >
+                                            <p:outputLabel value="#{medicamentos.idMedicamento.nombreGenerico}"/>
+                                        </p:column>
+                                        <p:column headerText="Nombre Comercial de Medicamento" style="width: 25%; text-align:  center" >
+                                            <p:outputLabel value="#{medicamentos.idMedicamento.nombreComercial}"/>
+                                        </p:column>
+                                        <p:column headerText="Presentación" style="width: 25%; text-align:  center" >
+                                            <p:outputLabel value="#{medicamentos.idMedicamento.presentacion}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Cantidad" style="width: 15%; text-align:  center" >
+                                            <p:outputLabel value="#{medicamentos.cantidad}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Indicaciones" style="width: 25%; text-align:  center" >
+                                            <p:outputLabel value="#{medicamentos.dosis}"/>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                    <br/>
+                                    <br/>
+                                    <p:separator/>
+
+                                    <h2>Examenes de Laboratorio Clínico Indicados</h2>
+                                    <p:dataTable  value="#{episodioController.lstExamenesCliniIndicados}" var="clinico"
+                                                  emptyMessage="No se han agregado Examenes Clínicos">
+                                        <p:column headerText="Examenes Clinicos Indicado" style="width: 50%; text-align:  center" >
+                                            <p:outputLabel value="#{clinico.idExamenLabClinico.descripcion}"/>
+                                        </p:column>
+                                        <p:column headerText="Motivo de Indicación de Examen" style="width: 50%; text-align:  center" >
+                                            <p:outputLabel value="#{clinico.justificacion}"/>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                    <br/>
+                                    <br/>
+                                    <p:separator/>
+                                    <h2>Examenes Radiologicos Indicados</h2>
+                                    <p:dataTable  value="#{episodioController.lstExamRadioIndicados}" var="radiologico"
+                                                  emptyMessage="No se han agregado examenes Radiologicos">
+                                        <p:column headerText="Examenes Radiologicos Indicados" style="width: 50%; text-align:  center" >
+                                            <p:outputLabel value="#{radiologico.idExamenRadiologico.descripcion}"/>
+                                        </p:column>
+                                        <p:column headerText="Motivo de indicación de examen" style="width: 50%; text-align:  center" >
+                                            <p:outputLabel value="#{radiologico.justificacion}"/>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                    <br/>
+                                    <br/>
+                                    <h2>Detalles de Incapacidad</h2>
+
+
+                                    <br/>
+                                    <br/>
+                                    <p:separator/>
+
+                                    <h2>Referencias</h2>
+                                    <p:dataTable  value="#{episodioController.lstReferencias}" var="especialista" emptyMessage="No se han agregado referencias"
+                                                  >
+                                        <p:column headerText="Especialistas a referir" style="width: 50%; text-align:  center" >
+                                            <p:outputLabel value="#{especialista.idEspecialista.descripcion}"/>
+                                        </p:column>
+                                        <p:column headerText="Motivo de referencia" style="width: 50%; text-align:  center" >
+                                            <p:outputLabel value="#{especialista.motivoReferencia}"/>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <p:separator />
+                                    <p:commandButton value="Registrar Consulta Medíca" actionListener="#{episodioController.registrarEpisodio()}"  style="height: 65px; margin: 0 auto; margin-left:  35%"/>
+
+                                </p:panel>
+
+                            </p:tab>
+
+                        </p:tabView>
+                        <p:commandButton value="Ver Historial clínico de paciente"  style="height: 60px"/>
+                    </h:form>
+
+                </p:panel>
+                <p:dialog id="dlgDiagnosticos" header="Seleccion de Diagnosticos" showEffect="fade" hideEffect="explode" 
+                          style="width: 100%;margin: 0 auto; text-align:center;align-self: center ; height: 35%;
+                          padding: 5px; text-align: justify;font-size: 14px"
+                          widgetVar="dlgDiagnosticos" modal="true" draggable="false" resizable="false" minWidth="400"  >
+                    <h:form>
+
+                        <p:dataTable id="tblDiagnosticos" value="#{diagnosticoController.lstDiagnosticos}" 
+                                     var="diagnostico" style="width: 80%;margin: 0 auto; text-align:center;
+                                     padding: 5px; text-align: justify;font-size: 14px"  
+                                     emptyMessage="No hay registros en la base de datos" 
+                                     paginator="true" rows="15" paginatorPosition="bottom"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15,25,50"  widgetVar="data" >
+
+
+                            <f:facet name="header" >
+                                <p:outputPanel style="height: available">
+                                    <h:outputText value="Buscar en todos los campos" style="padding-right: 20px"/>
+                                    <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" 
+                                                  placeholder="Ingrese cualquier palabra o numero"  style="width: 350px"/> 
+
+                                </p:outputPanel>
+                                <p:separator/>
+                                <BR/>
+
+                            </f:facet>
+
+
+
+                            <p:column headerText="Diagnostico" style="width: 50%; text-align:  center" >
+                                <p:outputLabel value="#{diagnostico.descripcion}"/>
+                            </p:column>
+                            <p:column headerText="Seleccionar Diagnostico" style="width: 10%" >
+                                <p:commandButton value="Seleccionar" update="panel" oncomplete="PF('dlgDiagnosticos').hide();" >
+                                    <f:setPropertyActionListener target="#{episodioController.diagnosticoEncontrado.idDiagnostico}" value="#{diagnostico}" /> 
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+                        <p:commandButton value="Cancelar"  oncomplete="PF('dlgDiagnosticos').hide();"/>
+
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="dlgMedicamentos" header="Seleccion de Medicamentos" showEffect="fade" hideEffect="explode" 
+                          style="width: 100%;margin: 0 auto; text-align:center;align-self: center ; height: 35%;
+                          padding: 5px; text-align: justify;font-size: 14px"
+                          widgetVar="dlgMedicamentos" modal="true" draggable="false" resizable="false" minWidth="400"  >
+                    <h:form>
+
+                        <p:dataTable id="tblMedicamentos" value="#{medicamentoController.lstMedicamentos}" 
+                                     var="medicamento" style="width: 80%;margin: 0 auto; text-align:center;
+                                     padding: 5px; text-align: justify;font-size: 14px"  
+                                     emptyMessage="No hay registros de medicamentos" 
+                                     paginator="true" rows="15" paginatorPosition="bottom"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15,25,50"  widgetVar="data" >
+
+
+                            <f:facet name="header" >
+                                <p:outputPanel style="height: available">
+                                    <h:outputText value="Buscar en todos los campos" style="padding-right: 20px"/>
+                                    <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" 
+                                                  placeholder="Ingrese cualquier palabra o numero"  style="width: 350px"/> 
+
+                                </p:outputPanel>
+                                <p:separator/>
+                                <BR/>
+
+                            </f:facet>
+
+
+
+                            <p:column headerText="Nombre Generico de Medicamento" style="width: 25%; text-align:  center" >
+                                <p:outputLabel value="#{medicamento.nombreGenerico}"/>
+                            </p:column>
+                            <p:column headerText="Nombre Comercial de Medicamento" style="width: 25%; text-align:  center" >
+                                <p:outputLabel value="#{medicamento.nombreComercial}"/>
+                            </p:column>
+                            <p:column headerText="Presentación" style="width: 25%; text-align:  center" >
+                                <p:outputLabel value="#{medicamento.presentacion}"/>
+                            </p:column>
+                            <p:column headerText="Composición de Medicamento" style="width: 25%; text-align:  center" >
+                                <p:outputLabel value="#{medicamento.composicion}"/>
+                            </p:column>
+                            <p:column headerText="Seleccionar Medicamento" style="width: 10%" >
+                                <p:commandButton value="Seleccionar" update="panel" oncomplete="PF('dlgMedicamentos').hide();" >
+                                    <f:setPropertyActionListener target="#{episodioController.medicamentoIndicado.idMedicamento}" value="#{medicamento}" /> 
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+                        <p:commandButton value="Cancelar"  oncomplete="PF('dlgMedicamentos').hide();"/>
+
+                    </h:form>
+                </p:dialog>
+
+
+                <p:dialog id="dlgExamenClinico" header="Seleccion de Examenes Clínicos" showEffect="fade" hideEffect="explode" 
+                          style="width: 100%;margin: 0 auto; text-align:center;align-self: center ; height: 35%;
+                          padding: 5px; text-align: justify;font-size: 14px"
+                          widgetVar="dlgExamenClinico" modal="true" draggable="false" resizable="false" minWidth="400"  >
+                    <h:form>
+
+                        <p:dataTable id="tblExamenclinI" value="#{examenLabClinicoController.lstExamenesClinicos}" 
+                                     var="examencli" style="width: 80%;margin: 0 auto; text-align:center;
+                                     padding: 5px; text-align: justify;font-size: 14px"  
+                                     emptyMessage="No hay registros de examenes clínicos" 
+                                     paginator="true" rows="15" paginatorPosition="bottom"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15,25,50"  widgetVar="data" >
+                            <f:facet name="header" >
+                                <p:outputPanel style="height: available">
+                                    <h:outputText value="Buscar en todos los campos" style="padding-right: 20px"/>
+                                    <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" 
+                                                  placeholder="Ingrese cualquier palabra o numero"  style="width: 350px"/> 
+                                </p:outputPanel>
+                                <p:separator/>
+                                <BR/>
+                            </f:facet>
+                            <p:column headerText="Descripción de Examen Clínico" style="width: 25%; text-align:  center" >
+                                <p:outputLabel value="#{examencli.descripcion}"/>
+                            </p:column>
+
+                            <p:column headerText="Seleccionar Examen Clínico" style="width: 10%" >
+                                <p:commandButton value="Seleccionar" update="panel" oncomplete="PF('dlgExamenClinico').hide();" >
+                                    <f:setPropertyActionListener target="#{episodioController.examLabInd.idExamenLabClinico}" value="#{examencli}" /> 
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+                        <p:commandButton value="Cancelar"  oncomplete="PF('dlgExamenClinico').hide();"/>
+
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="dlgExamenRad" header="Seleccion de Examenes Radiologicos" showEffect="fade" hideEffect="explode" 
+                          style="width: 100%;margin: 0 auto; text-align:center;align-self: center ; height: 35%;
+                          padding: 5px; text-align: justify;font-size: 14px"
+                          widgetVar="dlgExamenRad" modal="true" draggable="false" resizable="false" minWidth="400"  >
+                    <h:form>
+
+                        <p:dataTable id="tblExamenRadI" value="#{examenRadiologicoController.lstExamenesRadiologicos}" 
+                                     var="examenRad" style="width: 80%;margin: 0 auto; text-align:center;
+                                     padding: 5px; text-align: justify;font-size: 14px"  
+                                     emptyMessage="No hay registros de examenes Radiologicos" 
+                                     paginator="true" rows="15" paginatorPosition="bottom"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15,25,50"  widgetVar="data" >
+                            <f:facet name="header" >
+                                <p:outputPanel style="height: available">
+                                    <h:outputText value="Buscar en todos los campos" style="padding-right: 20px"/>
+                                    <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" 
+                                                  placeholder="Ingrese cualquier palabra o numero"  style="width: 350px"/> 
+                                </p:outputPanel>
+                                <p:separator/>
+                                <BR/>
+                            </f:facet>
+                            <p:column headerText="Descripción de Examen Radiologico" style="width: 25%; text-align:  center" >
+                                <p:outputLabel value="#{examenRad.descripcion}"/>
+                            </p:column>
+
+                            <p:column headerText="Seleccionar Examen Radiologico" style="width: 10%" >
+                                <p:commandButton value="Seleccionar" update="panel" oncomplete="PF('dlgExamenClinico').hide();" >
+                                    <f:setPropertyActionListener target="#{episodioController.examRadiInd.idExamenRadiologico}" value="#{examenRad}" /> 
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+                        <p:commandButton value="Cancelar"  oncomplete="PF('dlgExamenRad').hide();"/>
+
+                    </h:form>
+                </p:dialog>
+
+
+                <p:dialog id="dlgReferir" header="Seleccion de Especialistas" showEffect="fade" hideEffect="explode" 
+                          style="width: 100%;margin: 0 auto; text-align:center;align-self: center ; height: 35%;
+                          padding: 5px; text-align: justify;font-size: 14px"
+                          widgetVar="dlgReferir" modal="true" draggable="false" resizable="false" minWidth="400"  >
+                    <h:form>
+
+                        <p:dataTable id="tblReferencia" value="#{especialistasController.lstEspecialistas}" 
+                                     var="especialista" style="width: 80%;margin: 0 auto; text-align:center;
+                                     padding: 5px; text-align: justify;font-size: 14px"  
+                                     emptyMessage="No hay registros de Especialistas" 
+                                     paginator="true" rows="15" paginatorPosition="bottom"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15,25,50"  widgetVar="data" >
+                            <f:facet name="header" >
+                                <p:outputPanel style="height: available">
+                                    <h:outputText value="Buscar en todos los campos" style="padding-right: 20px"/>
+                                    <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" 
+                                                  placeholder="Ingrese cualquier palabra o numero"  style="width: 350px"/> 
+                                </p:outputPanel>
+                                <p:separator/>
+                                <BR/>
+                            </f:facet>
+                            <p:column headerText="Especialista en Salud" style="width: 25%; text-align:  center" >
+                                <p:outputLabel value="#{especialista.descripcion}"/>
+                            </p:column>
+
+
+                            <p:column headerText="Seleccionar Especialista" style="width: 10%" >
+                                <p:commandButton value="Seleccionar" update="panel" oncomplete="PF('dlgReferir').hide();" >
+                                    <f:setPropertyActionListener target="#{episodioController.referencia.idEspecialista}" value="#{especialista}" /> 
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+                        <p:commandButton value="Cancelar"  oncomplete="PF('dlgReferir').hide();"/>
+
+                    </h:form>
+                </p:dialog>
+
+
+
+            </ui:define>
+
+            <ui:define name="bottom">
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

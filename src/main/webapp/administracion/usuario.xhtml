@@ -1,0 +1,236 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../plantilla.xhtml">
+
+
+
+            <ui:define name="content">
+                <br/>
+                <p:panel header="Registros de creacion de usuarios"  style="width: 100%;margin: 0 auto; text-align:center;
+                         padding: 5px; text-align: justify;font-size: 14px">
+                    <h:form >
+
+                        <p:growl id="mensaje" autoUpdate="false" severity="info, fatal" showSummary="false" showDetail="true"/>
+
+
+
+
+                        <p:fieldset legend="Datos Personales del Usuario">
+                            <p:panelGrid columns="3" layout="grid" style="width: 75%;margin: 0 auto" id="pgDatos">
+                                <p:outputLabel for="txtNombres" value="Nombres"/>
+                                <p:inputText  required="true"  id="txtNombres" value="#{usuarioController.persona.nombres}"/>
+                                <p:message for="txtNombres"/>
+
+                                <p:outputLabel for="txtApellidos"  value="Apellidos"/>
+                                <p:inputText  required="true"  id="txtApellidos" value="#{usuarioController.persona.apellidos}"/>
+                                <p:message for="txtApellidos"/>
+
+                                <p:outputLabel for="txtDui"  value="DUI"/>
+                                <p:inputMask  required="true"  id="txtDui" value="#{usuarioController.persona.dui}" mask="99999999-9"/>
+                                <p:message for="txtDui"/>
+
+                                <p:outputLabel for="rbdSexo"  value="Sexo"/>
+                                <p:selectOneRadio  required="true"  id="rbdSexo" value="#{usuarioController.persona.sexo}" >
+                                    <f:selectItem itemLabel="Masculino" itemValue="Masculino" />
+                                    <f:selectItem itemLabel="Femenino" itemValue="Femenino" />
+                                </p:selectOneRadio>
+                                <p:message for="rbdSexo" />
+
+                                <p:outputLabel for="cboEstadoCivil" value="Estado civil"/>
+                                <p:selectOneMenu id="cboEstadoCivil" required="true" value="#{usuarioController.persona.estadoCivil}">
+                                    <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                                    <f:selectItem itemLabel="Soltero/a" itemValue="Soltero/a"/>
+                                    <f:selectItem itemLabel="Casado/a" itemValue="Casado/a"/>
+                                    <f:selectItem itemLabel="Divorciado/a" itemValue="Divorciado/a"/>
+                                </p:selectOneMenu>
+                                <p:message for="cboEstadoCivil"/>
+
+
+
+                                <p:outputLabel for="txtFecha" value="Fecha de Nacimiento" />
+                                <p:calendar  required="true"  id="txtFecha" value="#{usuarioController.persona.fechaDeNacimiento}"  locale="es" navigator="true" showTodayButton="true"/>
+                                <p:message for="txtFecha" />
+
+                                <p:outputLabel for="rhDireccion"  value="Dirección"/>
+                                <p:inputTextarea maxlength="255" style="width: 100%" required="true"  id="rhDireccion" value="#{usuarioController.persona.direccion}"/>
+                                <p:message for="rhDireccion"/>
+
+                          
+
+
+                            </p:panelGrid>
+                        </p:fieldset>
+
+
+
+                        <p:fieldset legend="Credenciales de usuario" style="margin: 0 auto" >
+
+                            <p:panelGrid columns="3" layout="grid" style="width: 75%;margin: 0 auto " id="pgUsuario">
+                                <p:outputLabel for="cboTipo" value="Tipo de Usuario" />
+                                <p:selectOneMenu id="cboTipo" value="#{usuarioController.usuario.idTipoUsuario}" converter="entityConverter">
+                                    <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                                    <f:selectItems value="#{tipoUsuarioController.tiposUsuarios}" var="tipoUsuario" 
+                                                   itemValue="#{tipoUsuario}" itemLabel="#{tipoUsuario.tipoUsuario}"/>
+                                </p:selectOneMenu>
+                                <p:message for="cboTipo"/>
+
+                                <p:outputLabel for="txtUsuario" value="Usuario"/>
+                                <p:inputText id="txtUsuario" required="true" value="#{usuarioController.usuario.usuario}"/>
+                                <p:message for="txtUsuario"/>
+
+                                <p:outputLabel for="clave1" value="Clave"/>
+                                <p:password id="clave1" value="#{usuarioController.usuario.clave}" match="clave2" 
+                                            validatorMessage="Las claves no coinciden" goodLabel="Buena" strongLabel="Fuerte" weakLabel="Debil"
+                                            required="true"  feedback="true" promptLabel="Ingrese un clave"/>
+                                <p:message for="clave1"/>
+
+                                <p:outputLabel for="clave2" value="Repetir Clave"/>
+                                <p:password id="clave2" validatorMessage="Las claves no coinciden" goodLabel="Buena" strongLabel="Fuerte" weakLabel="Debil"
+                                            required="true"  feedback="true" promptLabel="Repita la clave"/>
+                                <p:message for="clave2" />
+                                <h:column/>
+                                <p:commandButton actionListener="#{usuarioController.registarUsuario()}"  action="/usuario.xhtml?faces-redirect=true"
+                                                 value="Registrar" icon="ui-icon-check" update="pgDatos,pgUsuario,mensaje" style="margin: 0 auto" >
+
+                                </p:commandButton>
+
+                            </p:panelGrid>
+
+                        </p:fieldset>
+
+                    </h:form>
+                    <p:separator/>
+
+                    <p:dataTable id="tblUsuarios" value="#{usuarioController.usuarios}" var="usuario"  
+                                 emptyMessage="No hay usuarios registrados en la base de datos"
+                                 paginator="true" rows="10" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                                 {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10" reflow="true" resizeMode="expand"   widgetVar="data">
+
+                        <p:column headerText="Nombre del usuario" >
+
+                            <p:outputLabel value="#{usuario.idPersona.nombres} #{usuario.idPersona.apellidos}"/>
+                        </p:column>
+                        
+                        <p:column headerText="Tipo de usuario" sortable="true" style="height: 45px" >
+
+                            <p:outputLabel value="#{usuario.idTipoUsuario.tipoUsuario}"/>
+                        </p:column>
+
+ 
+                        <p:column headerText="Usuario de acceso" >
+
+                            <p:outputLabel value="#{usuario.usuario}"/>
+                        </p:column>
+
+                        <p:column headerText="Operaciones" style="text-align: center; padding-right: 10px">
+
+                            <p:commandButton title="Modificar el Usuario" icon="ui-icon-pencil"
+                                             oncomplete="PF('dlgModificar').show();"  update=":frmModificar" 
+                                             actionListener="#{usuarioController.setUsuario(usuario)}" >
+                                <f:setPropertyActionListener target="#{usuarioController.usuario}" value="#{usuario}"  />
+                            </p:commandButton>
+
+                            <p:commandButton title="Eliminar el Usuario" icon="ui-icon-close" oncomplete="PF('dlgEliminar').show();">
+                                <f:setPropertyActionListener target="#{usuarioController.usuario}" value="#{usuario}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:dialog id="dlgModificar" header="Modificar Usuario" showEffect="fade" hideEffect="fade"
+                              widgetVar="dlgModificar" modal="true" draggable="false" resizable="false" minWidth="400"  >
+                        <h:form id="frmModificar">
+
+                            <p:tabView dynamic="true" cache="true" effect="fold">
+                                <p:tab title="Información Personal">
+
+                                    <p:panelGrid columns="3" layout="grid" style="width: 650px;margin: 0 auto" id="pgDatos">
+                                        <p:outputLabel for="txtNombres" value="Nombres"/>
+                                        <p:inputText  required="true"  id="txtNombres" value="#{usuarioController.usuario.idPersona.nombres}"/>
+                                        <p:message for="txtNombres"/>
+
+                                        <p:outputLabel for="txtApellidos"  value="Apellidos"/>
+                                        <p:inputText  required="true"  id="txtApellidos" value="#{usuarioController.usuario.idPersona.apellidos}"/>
+                                        <p:message for="txtApellidos"/>
+
+                                        <p:outputLabel for="rbdSexo"  value="Sexo"/>
+                                        <p:selectOneRadio  required="true"  id="rbdSexo" value="#{usuarioController.usuario.idPersona.sexo}" >
+                                            <f:selectItem itemLabel="Masculino" itemValue="Masculino" />
+                                            <f:selectItem itemLabel="Femenino" itemValue="Femenino" />
+                                        </p:selectOneRadio>
+                                        <p:message for="rbdSexo" />
+
+                                        <p:outputLabel for="txtFecha" value="Fecha de Nacimiento" />
+                                        <p:calendar  required="true"  id="txtFecha" value="#{usuarioController.usuario.idPersona.fechaDeNacimiento}"  locale="es" navigator="true" showTodayButton="true"/>
+                                        <p:message for="txtFecha" />
+                                    </p:panelGrid>
+                                </p:tab>
+
+                                <p:tab title="Información de Credenciales">
+
+
+                                    <p:panelGrid columns="3" layout="grid" style="width: 650px;margin: 0 auto " id="pgUsuario">
+                                        <p:outputLabel for="cboTipo" value="Tipo de Usuario"/>
+                                        <p:selectOneMenu id="cboTipo" value="#{usuarioController.usuario.idTipoUsuario}">
+                                            <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                                            <f:selectItem itemLabel="Operario" itemValue="Operario"/>
+                                            <f:selectItem itemLabel="Administrador" itemValue="Administrador"/>
+                                        </p:selectOneMenu>
+                                        <p:message for="cboTipo"/>
+
+                                        <p:outputLabel for="txtUsuario" value="Usuario"/>
+                                        <p:inputText id="txtUsuario" required="true" value="#{usuarioController.usuario.usuario}"/>
+                                        <p:message for="txtUsuario"/>
+
+                                    </p:panelGrid>
+
+                                </p:tab>
+
+
+                            </p:tabView>
+                            <p:commandButton  style="margin: 0 auto; text-align: center" actionListener="#{usuarioController.modificarUsuario()}"  
+
+                                              action="/administracion/usuario.xhtml?faces-redirect=true"
+                                              value="Modificar" icon="ui-icon-check" >
+
+                            </p:commandButton>
+                            <p:commandButton value="Cancelar" oncomplete="PF('dlgModificar').hide()" />
+                        </h:form>
+
+                    </p:dialog>
+
+                    <p:dialog  header="Eliminar Usuario"
+                               showEffect="explode" hideEffect="explode"
+                               widgetVar="dlgEliminar" modal="true" resizable="false" minWidth="200">
+                        <h:form id="formEliminar">
+
+                            <h:outputText value="¿Esta seguro de eliminar difinitivamente este usuario?"/>
+                            <p:panelGrid columns="2"  layout="grid">
+                                <p:commandButton value="Si" actionListener="#{usuarioController.eliminarUsuario()}"
+                                                 action="/administracion/usuario.xhtml?faces-redirect=true"
+                                                 oncomplete="PF('dlgeliminar').hide();"/>
+                                <p:commandButton value="No" onclick="PF('dlgeliminar').hide()"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                </p:panel>
+
+            </ui:define>
+
+            <ui:define name="bottom">
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

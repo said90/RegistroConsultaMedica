@@ -1,0 +1,245 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <h:outputScript value="es" library="js" name="/resources/js/spanishLocale.js" />
+    </h:head>
+    <body>
+
+        <ui:composition template="./../plantilla.xhtml">
+
+
+
+            <ui:define name="content">
+                <p:panel header="Registro de Citas"  id="panel"
+                         style="width: 100%;margin: 0 auto; text-align:center;align-self: center ;
+                         padding: 5px; text-align: justify;font-size: 14px">
+
+                    <p:tabView dynamic="true" cache="true" effect="fold">
+                        <p:tab title="Citas">
+                            <h:form id="frmMostrar" >
+                                <p:growl  globalOnly="true" showDetail="true"/>
+                                <p:dataTable id="tblCitas" value="#{agendaController.lstCitas}" 
+                                             var="cita" style="width: 80%;margin: 0 auto; text-align:center; 
+                                             padding: 5px; text-align: justify;font-size: 14px"
+                                             emptyMessage="No hay citas registradas en la base de datos" 
+                                             paginator="true" rows="15" paginatorPosition="bottom"
+                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15,25,50" reflow="true" resizeMode="expand"  widgetVar="data" >
+
+
+                                    <f:facet name="header" >
+                                        <p:outputPanel style="height: available">
+                                            <h:outputText value="Buscar en todos los campos" style="padding-right: 20px"/>
+                                            <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" 
+                                                          placeholder="Ingrese cualquier palabra o numero"  style="width: 350px"/> 
+                                            <p:commandButton  
+                                                value="Registrar Cita" icon="ui-icon-pencil"
+                                                onclick="PF('dlgRegistrar').show();">
+                                                <p:effect type="pulsate" event="click" />
+                                            </p:commandButton>
+                                        </p:outputPanel>
+                                        <p:separator/>
+                                        <BR/>
+
+                                    </f:facet>
+
+                                    <p:column headerText="Fecha de registro de cita" style="width: 50%; text-align:  center" >
+                                        <p:outputLabel value="#{cita.fechaRegistro}" >
+                                            <f:convertDateTime pattern="dd-MM-yyyy" timeZone="local" />
+                                        </p:outputLabel>
+
+                                    </p:column>
+
+
+                                    <p:column headerText="Fecha  de cita" style="width: 50%; text-align:  center" >
+                                        <p:outputLabel value="#{cita.fechaCita}" >
+
+                                            <f:convertDateTime pattern="dd-MM-yyyy HH:mm"  dateStyle="full" />
+
+                                        </p:outputLabel>
+
+                                    </p:column>
+                                    <p:column headerText="Nombre del paciente" style="width: 50%; text-align:  center" >
+                                        <p:outputLabel value="#{cita.idPaciente.idPersona.nombres} #{cita.idPaciente.idPersona.apellidos}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Medico asignado" style="width: 50%; text-align:  center" >
+                                        <p:outputLabel value="Dr. #{cita.idMedico.idPersona.nombres} #{cita.idMedico.idPersona.apellidos}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Motivo de consulta" style="width: 50%; text-align:  center" >
+                                        <p:outputLabel value="#{cita.motivoConsulta}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Operaciones" style=" width: 25%;text-align: center; padding-right: 10px">
+
+                                        <p:commandButton title="Modificar Cita" icon="ui-icon-pencil"
+                                                         oncomplete="PF('dlgModificar').show();"  
+                                                         actionListener="#{agendaController.setCita(cita)}" update="dlgModificar"  >
+                                            <f:setPropertyActionListener target="#{agendaController.cita}" value="#{cita}"  />
+                                        </p:commandButton>
+
+                                        <p:commandButton title="Eliminar el Diagnostico" icon="ui-icon-close" oncomplete="PF('dlgEliminar').show();">
+                                            <f:setPropertyActionListener target="#{agendaController.cita}" value="#{cita}" />
+                                        </p:commandButton>
+                                    </p:column>
+
+                                </p:dataTable>
+
+                            </h:form>
+                        </p:tab>
+                        <p:tab  title="Calendario de citas"> 
+                            <h:form>
+
+                                <h:panelGrid  columnClasses="value" style="width: 100%; height: 25%">
+
+                                    <p:schedule id="schedule" value="#{agendaController.eventModel}" widgetVar="myschedule"  draggable="false"
+                                                resizable="false"  
+                                                locale="es"  aspectRatio="3.3" clientTimeZone="local" >
+
+                                        <p:ajax event="dateSelect"  listener="#{agendaController.onDateSelect}" update="dlgRegistrar" oncomplete="PF('dlgRegistrar').show();" />
+
+                                    </p:schedule>
+
+                                </h:panelGrid>
+
+
+                            </h:form>
+                        </p:tab>
+                    </p:tabView>
+                </p:panel>
+
+                <p:dialog id="dlgRegistrar" header="Registrar Cita " showEffect="explode" hideEffect="bounce" 
+                          style="width: 100%;margin: 0 auto; text-align:center;align-self: center ;
+                          padding: 5px; text-align: justify;font-size: 14px"
+                          widgetVar="dlgRegistrar" modal="true" draggable="false" resizable="false" minWidth="600"   >
+                    <h:form>
+                        <p:panelGrid columns="3" layout="grid" style="width: 100%;margin: 0 auto; text-align:center;align-self: center ;
+                                     padding: 5px; text-align: justify;font-size: 14px">
+                            <p:outputLabel value="Fecha de registro de cita: " for="txtFechaRegistro"  style="margin: 0 auto; text-align:center;align-self: center ;
+                                           padding: 5px; text-align: justify;font-size: 14px" />
+                            
+                            <p:calendar id="txtFechaRegistro" mindate="today" maxdate="today" value="#{agendaController.cita.fechaRegistro}"
+                                        pagedate="today"  locale="es"  pattern="dd/MM/yyyy" />
+                            <p:message for="txtFechaRegistro"/>
+
+                            <p:outputLabel for="cboPaciente" value="Seleccione paciente: " />
+                            <p:selectOneMenu id="cboPaciente" value="#{agendaController.cita.idPaciente}"  
+                                             effect="bounce" filterMatchMode="contains" converter="entityConverter" filter="true" >
+                                <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                                <f:selectItems value="#{agendaController.lstPacientes}" var="paciente" 
+                                               itemValue="#{paciente}" itemLabel="#{paciente.idPersona.nombres } #{paciente.idPersona.apellidos}"/>
+                            </p:selectOneMenu>
+                            <p:message for="cboPaciente"/>
+
+
+                            <p:outputLabel for="txtFechaCita" value="Fecha de cita: " />
+                            <p:calendar  required="true"  id="txtFechaCita" value="#{agendaController.cita.fechaCita}" pattern="dd/MM/yyyy HH:mm"
+                                         locale="es" navigator="true" showTodayButton="true" selectOtherMonths="true" timeControlType="slider" />
+                            <p:message for="txtFechaCita" />
+
+                            <p:outputLabel for="cboMedico" value="Seleccione medico: " />
+                            <p:selectOneMenu id="cboMedico" value="#{agendaController.cita.idMedico}" converter="entityConverter"
+                                             effect="bounce" filterMatchMode="contains" filter="true" >
+                                <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                                <f:selectItems value="#{agendaController.lstMedicos}" var="medico" 
+                                               itemValue="#{medico}" itemLabel="Dr. #{medico.idPersona.nombres } #{medico.idPersona.apellidos}"/>
+                            </p:selectOneMenu>
+                            <p:message for="cboMedico"/>
+
+                            <p:outputLabel for="txtMotivo" value="Motivo de consulta: " />
+                            <p:inputTextarea id="txtMotivo" value="#{agendaController.cita.motivoConsulta}"/>
+                            <p:message for="txtMotivo" />
+
+
+
+                            <p:commandButton value="Registrar" actionListener="#{agendaController.registarCita()}" 
+                                             action="agendarPaciente.xhtml?faces-redirect=true" oncomplete="PF('dlgRegistrar').hide();" 
+                                             update="panel"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+
+
+                <p:dialog id="dlgModificar" header="Modificar Diagnostico" showEffect="fade" hideEffect="explode" 
+                          style="width: 100%;margin: 0 auto; text-align:center;align-self: center ;
+                          padding: 5px; text-align: justify;font-size: 14px"
+                          widgetVar="dlgModificar" modal="true" draggable="false" resizable="false" minWidth="400"  >
+                    <h:form>
+                        <p:panelGrid columns="3" layout="grid" style="width: 100%;margin: 0 auto; text-align:center;align-self: center ;
+                                     padding: 5px; text-align: justify;font-size: 14px">
+                            <p:outputLabel value="Fecha de registro de cita: " for="txtFechaRegistroM"  style="margin: 0 auto; text-align:center;align-self: center ;
+                                           padding: 5px; text-align: justify;font-size: 14px" />
+                            <p:calendar id="txtFechaRegistroM" mindate="today" maxdate="today" value="#{agendaController.cita.fechaRegistro}" locale="es" pattern="dd/MM/yyyy"/>
+                            <p:message for="txtFechaRegistroM"/>
+
+                            <p:outputLabel for="cboPacienteM" value="Seleccione paciente: " />
+                            <p:selectOneMenu id="cboPacienteM" value="#{agendaController.cita.idPaciente}"  
+                                             effect="bounce" filterMatchMode="contains" converter="entityConverter" filter="true" >
+                                <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                                <f:selectItems value="#{agendaController.lstPacientes}" var="paciente" 
+                                               itemValue="#{paciente}" itemLabel="#{paciente.idPersona.nombres } #{paciente.idPersona.apellidos}"/>
+                            </p:selectOneMenu>
+                            <p:message for="cboPacienteM"/>
+
+
+                            <p:outputLabel for="txtFechaCitaM" value="Fecha de cita: " />
+                            <p:calendar  required="true"  id="txtFechaCitaM" value="#{agendaController.cita.fechaCita}"  pattern="dd/MM/yyyy HH:mm"
+                                         locale="es" navigator="true" showTodayButton="true" selectOtherMonths="true" timeControlType="slider" />
+                            <p:message for="txtFechaCitaM" />
+
+                            <p:outputLabel for="cboMedicoM" value="Seleccione medico: " />
+                            <p:selectOneMenu id="cboMedicoM" value="#{agendaController.cita.idMedico}" converter="entityConverter"
+                                             effect="bounce" filterMatchMode="contains" filter="true" >
+                                <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                                <f:selectItems value="#{agendaController.lstMedicos}" var="medico" 
+                                               itemValue="#{medico}" itemLabel="Dr. #{medico.idPersona.nombres } #{medico.idPersona.apellidos}"/>
+                            </p:selectOneMenu>
+                            <p:message for="cboMedicoM"/>
+
+                            <p:outputLabel for="txtMotivoM" value="Motivo de consulta: " />
+                            <p:inputTextarea id="txtMotivoM" value="#{agendaController.cita.motivoConsulta}"/>
+                            <p:message for="txtMotivoM" />
+
+
+
+                            <p:commandButton value="Modificar" actionListener="#{agendaController.modificarCita()}" 
+                                             action="agendarPaciente.xhtml?faces-redirect=true" oncomplete="PF('dlgRegistrar').hide();" 
+                                             update="panel"/>
+                        </p:panelGrid>
+                    </h:form> 
+                </p:dialog> 
+
+
+                <p:dialog  header="Eliminar Cita"
+                           showEffect="explode" hideEffect="explode"
+                           widgetVar="dlgEliminar" modal="true" resizable="false" minWidth="200">
+                    <h:form id="formEliminar">
+                        <h:outputText value="¿Desea eliminar esta cita?"/>
+                        <p:commandButton value="Si" actionListener="#{agendaController.eliminarCita()}"
+                                         action="agendarPaciente.xhtml?faces-redirect=true"
+                                         oncomplete="PF('dlgeliminar').hide();"/>
+                        <p:commandButton value="No" onclick="PF('dlgeliminar').hide()"/>
+                    </h:form>
+                </p:dialog>  
+
+            </ui:define>
+
+            <ui:define name="bottom">
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+
+
+
+</html>

@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../plantilla.xhtml">
+
+
+            <ui:define name="content">
+                <p:panel header="Registros de creacion de Tipo de Usuario"  id="panel"
+                         style="width: 100%;margin: 0 auto; text-align:center;align-self: center ;
+                         padding: 5px; text-align: justify;font-size: 14px">
+                    <h:form id="frmMostrar" >
+                        <p:growl  globalOnly="true" showDetail="true"/>
+                        <p:dataTable id="tblTipoPersona" value="#{tipoUsuarioController.tiposUsuarios}" 
+                                     var="tipoUsuario" style="width: 80%;margin: 0 auto; text-align:center;
+                                     padding: 5px; text-align: justify;font-size: 14px"
+                                     emptyMessage="No hay registros en la base de datos"
+                                     paginator="true" rows="5" paginatorPosition="bottom"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15" reflow="true" resizeMode="expand"  widgetVar="data" >
+
+
+                            <f:facet name="header" >
+                                <p:outputPanel style="height: available">
+                                    <h:outputText value="Buscar en todos los campos" style="padding-right: 20px"/>
+                                    <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" 
+                                                  placeholder="Ingrese cualquier palabra o numero"  style="width: 350px"/> 
+                                    <p:commandButton  
+                                        value="Registrar Tipo de Usuario" icon="ui-icon-pencil"
+                                        onclick="PF('dlgRegistrar').show();">
+                                        <p:effect type="pulsate" event="click" />
+                                    </p:commandButton>
+                                </p:outputPanel>
+                                <p:separator/>
+                                <BR/>
+
+                            </f:facet>
+
+                            <p:column headerText="Tipo de Usuario" style="width: 50%; text-align:  center">
+                                <p:outputLabel value="#{tipoUsuario.tipoUsuario}"/>
+                            </p:column>
+                            <p:column headerText="Operaciones" style=" width: 25%;text-align: center; padding-right: 10px">
+
+                                <p:commandButton title="Modificar tipo de Usuario" icon="ui-icon-pencil"
+                                                 oncomplete="PF('dlgModificar').show();"  
+                                                  update="dlgModificar"  >
+                                    <f:setPropertyActionListener target="#{tipoUsuarioController.tipoUsuario}" value="#{tipoUsuario}"  />
+                                </p:commandButton>
+
+                                <p:commandButton title="Eliminar el Tipo de persona" icon="ui-icon-close" oncomplete="PF('dlgEliminar').show();">
+                                    <f:setPropertyActionListener target="#{tipoUsuarioController.tipoUsuario}" value="#{tipoUsuario}"/>
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </h:form>
+
+                </p:panel>
+
+                <p:dialog id="dlgRegistrar" header="Crear Tipo de Usuario" showEffect="fade" hideEffect="explode"
+                          widgetVar="dlgRegistrar" modal="true" draggable="false" resizable="false" minWidth="400"  >
+                    <h:form>
+                        <p:panelGrid columns="2" layout="grid">
+                            <p:outputLabel value="Tipo de Usuario" for="tipoUsuario"  />
+                            <p:inputText id="tipoUsuario" value="#{tipoUsuarioController.tipoUsuario.tipoUsuario}"  style="width: 100px"
+                                         title="tipoUsuario" />
+                            <p:commandButton value="Registrar" actionListener="#{tipoUsuarioController.registrarTipoUsuario()}" 
+                                             action="tipoUsuario.xhtml?faces-redirect=true" oncomplete="PF('dlgRegistrar').hide();" 
+                                             update="panel"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+
+
+                <p:dialog id="dlgModificar" header="Modificar tipo de Usuario" showEffect="fade" hideEffect="explode"
+                          widgetVar="dlgModificar" modal="true" draggable="false" resizable="false" minWidth="400"  >
+                    <h:form>
+                        <p:panelGrid columns="2" layout="grid">
+                            <p:outputLabel value="Tipo de Usuario:" for="tipoUsuarioModificar"  />
+                            <p:inputText id="tipoUsuarioModificar" value="#{tipoUsuarioController.tipoUsuario.tipoUsuario}"  style="width: 100px"
+                                         title="TipoPersona" />
+                            <p:commandButton value="Modificar" actionListener="#{tipoUsuarioController.modificarTipoUsuario()}" 
+                                             action="tipoUsuario.xhtml?faces-redirect=true" onclick="PF('dlgModificar').hide();" 
+                                             update="panel"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog> 
+
+
+                <p:dialog  header="Eliminar Tipo de Usuario"
+                           showEffect="explode" hideEffect="explode"
+                           widgetVar="dlgEliminar" modal="true" resizable="false" minWidth="200">
+                    <h:form id="formEliminar">
+                        <h:outputText value="¿Desea eliminar este registro?"/>
+                        <p:commandButton value="Si" actionListener="#{tipoUsuarioController.eliminarTipoUsuario()}"
+                                         action="tipoUsuario.xhtml?faces-redirect=true"
+                                         oncomplete="PF('dlgeliminar').hide();"/>
+                        <p:commandButton value="No" onclick="PF('dlgeliminar').hide()"/>
+                    </h:form>
+                </p:dialog> 
+
+            </ui:define>
+
+            <ui:define name="bottom">
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

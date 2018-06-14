@@ -1,0 +1,226 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../plantilla.xhtml">
+
+
+
+            <ui:define name="content">
+                <p:panel header="Registros de pacientes"  id="panel"
+                         style="width: 100%;margin: 0 auto; text-align:center;align-self: center ;
+                         padding: 5px; text-align: justify;font-size: 14px">
+                    <h:form id="frmMostrar" >
+                        <p:growl  globalOnly="true" showDetail="true"/>
+                        <p:dataTable id="tblPacientes"  value="#{pacienteController.lstPacientes}"
+                                     var="paciente" style="width: 80%;margin: 0 auto; text-align:center;
+                                     padding: 5px; text-align: justify;font-size: 14px"
+                                     emptyMessage="No hay registros en la base de datos"
+                                     paginator="true" rows="5" paginatorPosition="bottom"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15" reflow="true" resizeMode="expand"  widgetVar="data" >
+
+
+                            <f:facet name="header" >
+                                <p:outputPanel style="height: available">
+                                    <h:outputText value="Buscar en todos los campos" style="padding-right: 20px"/>
+                                    <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" 
+                                                  placeholder="Ingrese cualquier palabra o numero"  style="width: 350px"/> 
+                                    <p:commandButton  
+                                        value="Registrar Paciente" icon="ui-icon-pencil"
+                                        onclick="PF('dlgRegistrar').show();">
+                                        <p:effect type="pulsate" event="click" />
+                                    </p:commandButton>
+                                </p:outputPanel>
+                                <p:separator/>
+                                <BR/>
+
+                            </f:facet>
+
+                            <p:column headerText="DUI" filterBy="#{paciente.idPersona.dui}" filterMatchMode="contains" style="width: 50%; text-align:  center">
+                                <p:outputLabel value="#{paciente.idPersona.dui} "/>
+                            </p:column>
+
+                            <p:column headerText="Nombre del paciente" filterBy="#{paciente.idPersona.nombres} #{paciente.idPersona.apellidos}" filterMatchMode="contains" style="width: 50%; text-align:  center">
+                                <p:outputLabel value="#{paciente.idPersona.nombres} #{paciente.idPersona.apellidos}"/>
+                            </p:column>
+
+
+                            <p:column headerText="Sexo" style="width: 50%; text-align:  center">
+                                <p:outputLabel value="#{paciente.idPersona.sexo} "/>
+                            </p:column>
+
+                            <p:column headerText="Fecha de nacimiento" style="width: 50%; text-align:  center">
+                                <p:outputLabel value="#{paciente.idPersona.fechaDeNacimiento} "/>
+                            </p:column>
+
+                            <p:column headerText="Estado civil" style="width: 50%; text-align:  center">
+                                <p:outputLabel value="#{paciente.idPersona.estadoCivil} "/>
+                            </p:column>
+
+                            <p:column headerText="Dirección" style="width: 50%; text-align:  center">
+                                <p:outputLabel value="#{paciente.idPersona.direccion} "/>
+                            </p:column>
+
+                            <p:column headerText="Telefono" style="width: 50%; text-align:  center">
+                                <p:outputLabel value="#{paciente.idPersona.telefono} "/>
+                            </p:column>
+
+
+
+
+                            <p:column headerText="Operaciones" style=" width: 25%;text-align: center; padding-right: 10px">
+
+                                <p:commandButton title="Modificar paciente" icon="ui-icon-pencil"
+                                                 oncomplete="PF('dlgModificar').show();"  
+                                                 actionListener="#{pacienteController.setPaciente(paciente)}" update="dlgModificar"  >
+                                    <f:setPropertyActionListener target="#{pacienteController.paciente}" value="#{paciente}"  />
+                                </p:commandButton>
+
+                                <p:commandButton title="Eliminar paciente" icon="ui-icon-close" oncomplete="PF('dlgEliminar').show();">
+                                    <f:setPropertyActionListener target="#{pacienteController.paciente}" value="#{paciente}" />
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </h:form>
+
+                </p:panel>
+
+                <p:dialog id="dlgRegistrar" header="Registrar paciente" showEffect="fade" hideEffect="explode"
+                          widgetVar="dlgRegistrar" modal="true" draggable="false" resizable="false" minWidth="400"  >
+                    <h:form>
+                        <p:panelGrid columns="3" layout="grid" style="width: 75%;margin: 0 auto" id="pgDatos">
+                            <p:outputLabel for="txtNombres" value="Nombres"/>
+                            <p:inputText  required="true"  id="txtNombres" value="#{pacienteController.persona.nombres}"/>
+                            <p:message for="txtNombres"/>
+
+                            <p:outputLabel for="txtApellidos"  value="Apellidos"/>
+                            <p:inputText  required="true"  id="txtApellidos" value="#{pacienteController.persona.apellidos}"/>
+                            <p:message for="txtApellidos"/>
+
+                            <p:outputLabel for="txtDui"  value="DUI"/>
+                            <p:inputMask  required="true"  id="txtDui" value="#{pacienteController.persona.dui}" mask="99999999-9"/>
+                            <p:message for="txtDui"/>
+
+                            <p:outputLabel for="rbdSexo"  value="Sexo"/>
+                            <p:selectOneRadio  required="true"  id="rbdSexo" value="#{pacienteController.persona.sexo}" >
+                                <f:selectItem itemLabel="Masculino" itemValue="Masculino" />
+                                <f:selectItem itemLabel="Femenino" itemValue="Femenino" />
+                            </p:selectOneRadio>
+                            <p:message for="rbdSexo" />
+
+                            <p:outputLabel for="cboEstadoCivil" value="Estado civil"/>
+                            <p:selectOneMenu id="cboEstadoCivil" required="true" value="#{pacienteController.persona.estadoCivil}">
+                                <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                                <f:selectItem itemLabel="Soltero/a" itemValue="Soltero/a"/>
+                                <f:selectItem itemLabel="Casado/a" itemValue="Casado/a"/>
+                                <f:selectItem itemLabel="Divorciado/a" itemValue="Divorciado/a"/>
+                            </p:selectOneMenu>
+                            <p:message for="cboEstadoCivil"/>
+
+
+
+                            <p:outputLabel for="txtFecha" value="Fecha de Nacimiento" />
+                            <p:calendar  required="true"  id="txtFecha" value="#{pacienteController.persona.fechaDeNacimiento}"  locale="es" navigator="true" showTodayButton="true"/>
+                            <p:message for="txtFecha" />
+
+                            <p:outputLabel for="rhDireccion"  value="Dirección"/>
+                            <p:inputTextarea maxlength="255" style="width: 100%" required="true"  id="rhDireccion" value="#{pacienteController.persona.direccion}"/>
+                            <p:message for="rhDireccion"/>
+
+                            <p:outputLabel for="txtTelefono"  value="Telefono"/>
+                            <p:inputMask  required="true"  id="txtTelefono" value="#{pacienteController.persona.telefono}" mask="9999-9999"/>
+                            <p:message for="txtTelefono"/>
+
+                            <p:commandButton value="Registrar" actionListener="#{pacienteController.regitrarPaciente()}"
+                                             action="pacientes.xhtml?faces-redirect=true" onclick="PF('dlgRegistrar').hide();" 
+                                             update="panel"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+
+
+                <p:dialog id="dlgModificar" header="Modificar Paciente" showEffect="fade" hideEffect="explode"
+                          widgetVar="dlgModificar" modal="true" draggable="false" resizable="false" minWidth="400"  >
+                    <h:form>
+                        <p:panelGrid columns="3" layout="grid" style="width: 75%;margin: 0 auto" id="pgDatos">
+                            <p:outputLabel for="txtNombresM" value="Nombres"/>
+                            <p:inputText  required="true"  id="txtNombresM" value="#{pacienteController.paciente.idPersona.nombres}"/>
+                            <p:message for="txtNombresM"/>
+
+                            <p:outputLabel for="txtApellidosM"  value="Apellidos"/>
+                            <p:inputText  required="true"  id="txtApellidosM" value="#{pacienteController.paciente.idPersona.apellidos}"/>
+                            <p:message for="txtApellidosM"/>
+
+                            <p:outputLabel for="txtDuiM"  value="DUI"/>
+                            <p:inputMask  required="true"  id="txtDuiM" value="#{pacienteController.paciente.idPersona.dui}" mask="99999999-9"/>
+                            <p:message for="txtDuiM"/>
+
+                            <p:outputLabel for="rbdSexoM"  value="Sexo"/>
+                            <p:selectOneRadio  required="true"  id="rbdSexoM" value="#{pacienteController.paciente.idPersona.sexo}" >
+                                <f:selectItem itemLabel="Masculino" itemValue="Masculino" />
+                                <f:selectItem itemLabel="Femenino" itemValue="Femenino" />
+                            </p:selectOneRadio>
+                            <p:message for="rbdSexoM" />
+
+                            <p:outputLabel for="cboEstadoCivilM" value="Estado civil"/>
+                            <p:selectOneMenu id="cboEstadoCivilM" required="true" value="#{pacienteController.paciente.idPersona.estadoCivil}">
+                                <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                                <f:selectItem itemLabel="Soltero/a" itemValue="Soltero/a"/>
+                                <f:selectItem itemLabel="Casado/a" itemValue="Casado/a"/>
+                                <f:selectItem itemLabel="Divorciado/a" itemValue="Divorciado/a"/>
+                            </p:selectOneMenu>
+                            <p:message for="cboEstadoCivilM"/>
+
+
+
+                            <p:outputLabel for="txtFechaM" value="Fecha de Nacimiento" />
+                            <p:calendar  required="true"  id="txtFechaM" value="#{pacienteController.paciente.idPersona.fechaDeNacimiento}"  locale="es" navigator="true" showTodayButton="true"/>
+                            <p:message for="txtFechaM" />
+
+                            <p:outputLabel for="rhDireccionM"  value="Dirección"/>
+                            <p:inputTextarea maxlength="255" style="width: 100%" required="true"  id="rhDireccionM" value="#{pacienteController.paciente.idPersona.direccion}"/>
+                            <p:message for="rhDireccionM"/>
+
+                            <p:outputLabel for="txtTelefonoM"  value="Telefono"/>
+                            <p:inputMask  required="true"  id="txtTelefonoM" value="#{pacienteController.paciente.idPersona.telefono}" mask="9999-9999"/>
+                            <p:message for="txtTelefonoM"/>
+
+                            <p:commandButton value="Modificar" actionListener="#{pacienteController.modificarPaciente()}"
+                                             action="pacientes.xhtml?faces-redirect=true" onclick="PF('dlgModificar').hide();" 
+                                             update="panel"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog> 
+
+
+                <p:dialog  header="Eliminar Paciente"
+                           showEffect="explode" hideEffect="explode"
+                           widgetVar="dlgEliminar" modal="true" resizable="false" minWidth="200">
+                    <h:form id="formEliminar">
+                        <h:outputText value="¿Desea eliminar este registro?"/>
+                        <p:commandButton value="Si" actionListener="#{pacienteController.eliminarPaciente()}"
+                                         action="pacientes.xhtml?faces-redirect=true"
+                                         oncomplete="PF('dlgeliminar').hide();"/>
+                        <p:commandButton value="No" onclick="PF('dlgeliminar').hide()"/>
+                    </h:form>
+                </p:dialog> 
+            </ui:define>
+
+            <ui:define name="bottom">
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

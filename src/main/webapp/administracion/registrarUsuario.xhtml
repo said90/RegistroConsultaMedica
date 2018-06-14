@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../plantilla.xhtml">
+
+
+
+            <ui:define name="content">
+
+                <p:panel header="Registros de creacion de usuarios"  style="width: 85%; height: 100%;margin: 0 auto; text-align:center;
+                         padding: 5px; text-align: justify;font-size: 14px">
+                    <h:form >
+
+                        <p:growl id="mensaje" autoUpdate="false" severity="info, fatal" showSummary="false" showDetail="true"/>
+
+
+                        <p:fieldset legend="Datos Personales del Usuario" style=" width: 65%; margin: 0 auto" >
+                            <p:panelGrid columns="3" layout="grid" style="width: 75%;margin: 0 auto" id="pgDatos">
+                                <p:outputLabel for="txtNombres" value="Nombres"/>
+                                <p:inputText  required="true"  id="txtNombres" value="#{usuarioController.persona.nombres}"/>
+                                <p:message for="txtNombres"/>
+
+                                <p:outputLabel for="txtApellidos"  value="Apellidos"/>
+                                <p:inputText  required="true"  id="txtApellidos" value="#{usuarioController.persona.apellidos}"/>
+                                <p:message for="txtApellidos"/>
+
+                                <p:outputLabel for="txtDui"  value="DUI"/>
+                                <p:inputMask  required="true"  id="txtDui" value="#{usuarioController.persona.dui}" mask="99999999-9"/>
+                                <p:message for="txtDui"/>
+
+                                <p:outputLabel for="txtFecha" value="Fecha de Nacimiento" />
+                                <p:calendar  required="true"  id="txtFecha" value="#{usuarioController.persona.fechaDeNacimiento}"
+                                             locale="es" navigator="true" showTodayButton="true"/>
+                                <p:message for="txtFecha" />
+
+                                <p:outputLabel for="rbdSexo"  value="Sexo"/>
+                                <p:selectOneRadio  required="true"  id="rbdSexo" value="#{usuarioController.persona.sexo}" >
+                                    <f:selectItem itemLabel="Masculino" itemValue="Masculino" />
+                                    <f:selectItem itemLabel="Femenino" itemValue="Femenino" />
+                                </p:selectOneRadio>
+                                <p:message for="rbdSexo" />
+                                <p:outputLabel for="cboEstadoCivil" value="Estado civil"/>
+                                <p:selectOneMenu id="cboEstadoCivil" required="true" value="#{usuarioController.persona.estadoCivil}">
+                                    <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                                    <f:selectItem itemLabel="Soltero/a" itemValue="Soltero/a"/>
+                                    <f:selectItem itemLabel="Casado/a" itemValue="Casado/a"/>
+                                    <f:selectItem itemLabel="Divorciado/a" itemValue="Divorciado/a"/>
+                                </p:selectOneMenu>
+                                <p:message for="cboEstadoCivil"/>
+                                <p:outputLabel for="rhDireccion"  value="Dirección"/>
+                                <p:inputTextarea maxlength="255" style="width: 200%" required="true"  id="rhDireccion" value="#{usuarioController.persona.direccion}"/>
+                                <p:message for="rhDireccion"/>
+
+                            </p:panelGrid>
+                            <p:panelGrid columns="3" layout="grid" style="width: 75%;margin: 0 auto" >
+
+                                <p:outputLabel for="cboTipoUsuario"  value="Tipo de Usuario"/>
+                                <p:selectOneMenu id="cboTipoUsuario" required="true" value="#{usuarioController.persona.idTipoPersona}">
+                                    <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                                    <f:selectItems value="#{usuarioController.tiposPersona}" var="tipPersona" 
+                                                   itemLabel="#{tipPersona.tipoPersona}" itemValue="#{tipPersona}" />
+                                </p:selectOneMenu>
+                                <p:message for="cboTipoUsuario"/>
+                                <p:outputLabel   value="Agregar tipo de Persona"/>
+
+                                <p:commandButton   
+                                    value="+"  style="margin: 0 auto" oncomplete="PF('dlgRegistrarPersona').show();" >
+
+                                </p:commandButton>
+                            </p:panelGrid>
+                        </p:fieldset>
+
+
+                        <br/>
+                        <p:separator/>
+                        <br/>
+                        <p:fieldset legend="Credenciales de usuario" style=" width: 65%;margin: 0 auto" >
+
+                            <p:panelGrid columns="3" layout="grid" style="width: 75%;margin: 0 auto" >
+                                <p:outputLabel  value="Agregar nuevo tipo de usuario"/>
+                                <p:commandButton   
+                                    value="+"  style="margin: 0 auto" oncomplete="PF('dlgRegistrarTipoUsuario').show();" >
+
+                                </p:commandButton>
+                                <p:column/>
+                                <p:outputLabel for="cboTipo" value="Tipo de Usuario"/>
+                                <p:selectOneMenu id="cboTipo" value="#{usuarioController.usuario.idTipoUsuario}">
+                                    <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                                    <f:selectItems value="#{usuarioController.tiposUsuarios}" var="tipoUsuario"
+                                                   itemLabel="#{tipoUsuario.tipoUsuario}" itemValue="#{tipoUsuario}"/>
+                                </p:selectOneMenu>
+                                <p:message for="cboTipo"/>
+
+                            </p:panelGrid>
+                            <p:panelGrid columns="3" layout="grid" style="width: 75%;margin: 0 auto " id="pgUsuario">
+
+
+                                <p:outputLabel for="txtUsuario" value="Usuario"/>
+                                <p:inputText id="txtUsuario" required="true" value="#{usuarioController.usuario.usuario}"/>
+                                <p:message for="txtUsuario"/>
+
+                                <p:outputLabel for="clave1" value="Clave"/>
+                                <p:password id="clave1" value="#{usuarioController.usuario.clave}" match="clave2" 
+                                            validatorMessage="Las claves no coinciden" goodLabel="Buena" strongLabel="Fuerte" weakLabel="Debil"
+                                            required="true"  feedback="true" promptLabel="Ingrese un clave"/>
+                                <p:message for="clave1"/>
+
+                                <p:outputLabel for="clave2" value="Repetir Clave"/>
+                                <p:password id="clave2" validatorMessage="Las claves no coinciden" goodLabel="Buena" strongLabel="Fuerte" weakLabel="Debil"
+                                            required="true"  feedback="true" promptLabel="Repita la clave"/>
+                                <p:message for="clave2" />
+                                <h:column/>
+                                <p:commandButton actionListener="#{usuarioController.registarUsuario()}"  action="/usuario.xhtml?faces-redirect=true"
+                                                 value="Registrar" icon="ui-icon-check" update="pgDatos,pgUsuario,mensaje" style="margin: 0 auto" >
+
+                                </p:commandButton>
+
+                            </p:panelGrid>
+
+                        </p:fieldset>
+
+                    </h:form>
+
+                    <p:dialog id="dlgRegistrarPersona" header="Crear nuevo tipo de Persona" showEffect="fade" hideEffect="explode"
+                              widgetVar="dlgRegistrarPersona" modal="true" draggable="false" resizable="false" minWidth="400"  >
+                        <h:form id="frmRegistrarTipoPersona">
+                            <p:fieldset legend="Agregar tipo de Persona">
+                            <p:panelGrid columns="3" layout="grid" style="width: 100%;margin: 0 auto" id="pgDatos">
+                                <p:outputLabel for="txtTipoPersona" value="Tipo de persona"/>
+                                <p:inputText  required="true"  id="txtTipoPersona" value="#{usuarioController.tipoPersona.tipoPersona}"/>
+                                <p:message for="txtTipoPersona"/>
+                                <p:commandButton value="Registrar"/>
+                            </p:panelGrid>
+                                
+                                <p:dataTable id="tblTipoPersona" value="#{usuarioController.tiposPersona}" var="tipoPersona"  
+                                 emptyMessage="No hay tipos de usuario registrados en la base de datos"
+                                 paginator="true" rows="10" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                                 {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10" reflow="true" resizeMode="expand" rowExpandMode="multiply" widgetVar="data">
+                                 
+                                 </p:dataTable>
+                                </p:fieldset>
+                        </h:form>
+                    </p:dialog>
+
+                    <p:dialog id="dlgRegistrarTipoUsuario" header="Crear nuevo tipo de usuario" showEffect="fade" hideEffect="explode"
+                              widgetVar="dlgRegistrarTipoUsuario" modal="true" draggable="false" resizable="false" minWidth="400"  >
+                        <h:form id="frmRegistrarTipoUsuario">
+
+                        </h:form>
+                    </p:dialog>
+                </p:panel>
+            </ui:define>
+
+            <ui:define name="bottom">
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
